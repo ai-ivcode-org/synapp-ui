@@ -3,11 +3,17 @@
     display: flex;
     flex-direction: column;
 }
-.chat__list {
+
+.chat__list_container {
     flex: 1;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;}
+    padding: 16px;
+}
+
+.chat__list {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
 /* css */
 /* Use float-based layout so messages can sit left/right while the bubble's content stays left-justified */
@@ -72,12 +78,13 @@
 }
 
 form.chat__form {
-    width: 100%;
     display: flex;
     align-items: center;
-    padding: 10px;
     background-color: #333333;
-    border-radius: 15px;
+    border-radius: 8px;
+
+    max-width: 800px;
+    margin: 16px auto;
 }
 
 form.chat__form textarea {
@@ -96,5 +103,8 @@ form.chat__form textarea {
     overflow: hidden; /* hide native scrollbar */
     min-height: 1.4em; /* starts at roughly one line */
     line-height: 1.4em;
+}
 
+form.chat__form button {
+    margin: 5px;
 }

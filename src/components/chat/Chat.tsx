@@ -26,18 +26,33 @@ export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
 
   const [input, setInput] = useState('')
   const [user, setUser] = useState<Sender>('user')
-  const listRef = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  // flag to indicate that the next messages update should trigger a smooth scroll
+  const shouldScrollRef = useRef(false)
 
   useEffect(() => {
-    if (listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight
+    if (!shouldScrollRef.current) return
+    const el = containerRef.current
+    if (!el) {
+      shouldScrollRef.current = false
+      return
     }
+
+    // run after paint to allow smooth scrolling without a jump
+    requestAnimationFrame(() => {
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+      shouldScrollRef.current = false
+    })
   }, [messages])
 
   function addMessage(text: string, sender: Sender = 'user') {
     const trimmed = text?.trim()
     if (!trimmed) return
     const msg: Message = { id: Date.now(), text: trimmed, sender, time: Date.now() }
+
+    // request a smooth scroll for this update only
+    shouldScrollRef.current = true
     setMessages(prev => [...prev, msg])
     if (onSend) onSend(msg)
   }
@@ -57,38 +72,41 @@ export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
 
   return (
     <div className="chat">
-      <div className="chat__list" ref={listRef}>
-        {messages.map(m => (
-          <div key={m.id} className={`chat__message ${m.sender === 'user' ? 'user' : 'assistant'}`}>
-            <div className="chat__bubble">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
-                {m.text}
-              </ReactMarkdown>
+      <div className="chat__list_container" ref={containerRef}>
+        <div className="chat__list">
+          {messages.map(m => (
+            <div key={m.id} className={`chat__message ${m.sender === 'user' ? 'user' : 'assistant'}`}>
+              <div className="chat__bubble">
+                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
+                  {m.text}
+                </ReactMarkdown>
+              </div>
+              <div className="chat__time">{new Date(m.time).toLocaleTimeString()}</div>
             </div>
-            <div className="chat__time">{new Date(m.time).toLocaleTimeString()}</div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      <form className="chat__form" onSubmit={handleSubmit}>
-        <select
-            value={user}
-            onChange={e => setUser(e.target.value as Sender)}
-        >
-            <option value="user">User</option>
-            <option value="assistant">Assistant</option>
-        </select>
-        <textarea
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask Anything..."
-          aria-label="Message"
-          rows={2}
-
-        />
-        <button type="submit">Send</button>
-      </form>
+      <div className="chat__input_container">
+        <form className="chat__form" onSubmit={handleSubmit}>
+          <select
+              value={user}
+              onChange={e => setUser(e.target.value as Sender)}
+          >
+              <option value="user">User</option>
+              <option value="assistant">Assistant</option>
+          </select>
+          <textarea
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask Anything..."
+            aria-label="Message"
+            rows={2}
+          />
+          <button type="submit">Send</button>
+        </form>
+      </div>
     </div>
   )
 }

@@ -1,4 +1,13 @@
-
+.chat {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.chat__list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;}
 
 /* css */
 /* Use float-based layout so messages can sit left/right while the bubble's content stays left-justified */
@@ -9,13 +18,13 @@
 }
 
 /* float my messages to the right and align their time text to the right */
-.chat__message.me {
+.chat__message.user {
     float: right;
     text-align: right; /* makes the time align right; bubble content stays left via .chat__bubble */
 }
 
 /* float other messages to the left and align their time text to the left */
-.chat__message.other {
+.chat__message.assistant {
     float: left;
     text-align: left;
 }
@@ -40,16 +49,16 @@
 }
 
 /* ensure explicit alignment for time (in case parents differ) */
-.chat__message.me .chat__time {
+.chat__message.user .chat__time {
     text-align: right;
 }
-.chat__message.other .chat__time {
+.chat__message.assistant .chat__time {
     text-align: left;
 }
 
 
 /* bubble styles for my messages */
-.chat__message.me .chat__bubble {
+.chat__message.user .chat__bubble {
     background-color: #333333; /* light green bubble */
     border-radius: 20px; /* rounded corners with a "tail" */
     padding: 0 16px;
@@ -58,6 +67,34 @@
 }
 
 /* bubble styles for other messages */
-.chat__message.other .chat__bubble {
+.chat__message.assistant .chat__bubble {
     width: 100%;
+}
+
+form.chat__form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #333333;
+    border-radius: 15px;
+}
+
+form.chat__form textarea {
+    field-sizing: content;
+    flex: 1;
+    resize: none;
+    padding: 10px;
+    border: none;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: inherit;
+    outline: none; /* remove default focus outline for pointer interactions */
+    box-shadow: none;
+
+    height: auto; /* allow JS to set height */
+    overflow: hidden; /* hide native scrollbar */
+    min-height: 1.4em; /* starts at roughly one line */
+    line-height: 1.4em;
+
 }

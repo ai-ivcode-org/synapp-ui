@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeSanitize from 'rehype-sanitize'
 import './Chat.css'
 
-export type Sender = 'me' | 'other' | 'system'
+export type Sender = 'user' | 'assistant'
 
 export interface Message {
   id: number
@@ -20,12 +20,12 @@ interface ChatProps {
 
 export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: 'Welcome to **chat**!\n\nYou can use _Markdown_ (e.g. `inline code`, lists, tables).', sender: 'system', time: Date.now() },
+    { id: 1, text: 'Welcome to **chat**!\n\nYou can use _Markdown_ (e.g. `inline code`, lists, tables).', sender: 'assistant', time: Date.now() },
     ...initialMessages
   ])
 
   const [input, setInput] = useState('')
-  const [user, setUser] = useState<Sender>('me')
+  const [user, setUser] = useState<Sender>('user')
   const listRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
     }
   }, [messages])
 
-  function addMessage(text: string, sender: Sender = 'me') {
+  function addMessage(text: string, sender: Sender = 'user') {
     const trimmed = text?.trim()
     if (!trimmed) return
     const msg: Message = { id: Date.now(), text: trimmed, sender, time: Date.now() }
@@ -59,7 +59,7 @@ export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
     <div className="chat">
       <div className="chat__list" ref={listRef}>
         {messages.map(m => (
-          <div key={m.id} className={`chat__message ${m.sender === 'me' ? 'me' : 'other'}`}>
+          <div key={m.id} className={`chat__message ${m.sender === 'user' ? 'user' : 'assistant'}`}>
             <div className="chat__bubble">
               <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
                 {m.text}
@@ -75,8 +75,8 @@ export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
             value={user}
             onChange={e => setUser(e.target.value as Sender)}
         >
-            <option value="me">Me</option>
-            <option value="other">Other</option>
+            <option value="user">User</option>
+            <option value="assistant">Assistant</option>
         </select>
         <textarea
           value={input}
@@ -92,4 +92,3 @@ export default function Chat({ onSend, initialMessages = [] }: ChatProps) {
     </div>
   )
 }
-

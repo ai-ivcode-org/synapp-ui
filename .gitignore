@@ -15,13 +15,16 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+
+# Ignore most of the .idea directory but allow IntelliJ run configurations
+# (common path: .idea/runConfigurations/*.xml)
+.idea/*
+!.idea/runConfigurations/
+!.idea/runConfigurations/*.xml
+
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-
-# Idea
-.idea/

@@ -15,9 +15,10 @@
     "jsx": "react-jsx",
     "strict": false,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "sourceMap": true,
+    "inlineSources": true
   },
   "include": ["src", "vite.config.ts", "types.d.ts"],
   "exclude": ["node_modules", "dist"]
 }
-

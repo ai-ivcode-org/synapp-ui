@@ -14,3 +14,23 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+----
+
+## Debugging in IntelliJ IDEA
+
+To debug this application in IntelliJ, you need to run **two configurations at the same time**:
+- **NPM:** Starts the application.
+- **JavaScript Debug:** Opens a browser with all the hooks needed to attach your debugger to the running application.
+
+### Create an NPM Configuration
+
+1. Go to `Run` > `Edit Configurations...`
+2. Click the `+` icon and select **NPM**.
+3. Set **Command** to `run` and **Scripts** to `dev`.
+
+### Create a JavaScript Debug Configuration
+
+1. Go to `Run` > `Edit Configurations...`
+2. Click the `+` icon and select **JavaScript Debug**.
+3. Set the **URL** to `http://localhost:5173/`.
